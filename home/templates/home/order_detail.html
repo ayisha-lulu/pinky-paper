@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Details | PINKY PAPER</title>
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+
+    <style>
+        .detail-page {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(190,140,165,0.13);
+            border: 1px solid #f2dce7;
+        }
+
+        .detail-title {
+            color: #c45d8b;
+            text-align: center;
+        }
+
+        .detail-info {
+            background: #f0f7fc;
+            padding: 18px;
+            border-radius: 14px;
+            margin: 20px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f1dce6;
+            color: #76566a;
+        }
+
+        .detail-total {
+            text-align: right;
+            font-size: 21px;
+            font-weight: bold;
+            color: #c45d8b;
+            margin-top: 22px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #bd6690;
+            text-decoration: none;
+        }
+
+        @media(max-width: 500px) {
+            .detail-card {
+                padding: 16px;
+            }
+
+            .detail-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="/">PINKY PAPER ♡</a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'dashboard' %}">My Account</a>
+        <a href="{% url 'order_history' %}">My Orders</a>
+    </nav>
+</header>
+
+<section class="detail-page">
+
+    <div class="detail-card">
+
+        <h1 class="detail-title">🎀 Order Details</h1>
+
+        <div class="detail-info">
+            <p><strong>Order ID:</strong> #{{ order.id }}</p>
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+            <p><strong>Status:</strong>
+                {% if order.is_completed %}
+                    Completed
+                {% else %}
+                    Processing
+                {% endif %}
+            </p>
+        </div>
+
+        <h2>🛍️ Purchased Items</h2>
+
+        {% for item in order.items.all %}
+            <div class="detail-item">
+                <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                <span>₹{{ item.price|floatformat:2 }}</span>
+            </div>
+        {% endfor %}
+
+        <div class="detail-total">
+            Total: ₹{{ order.total_amount|floatformat:2 }}
+        </div>
+
+        <a class="back-link" href="{% url 'order_history' %}">
+            ← Back to My Orders
+        </a>
+
+    </div>
+
+</section>
+
+</body>
+</html>

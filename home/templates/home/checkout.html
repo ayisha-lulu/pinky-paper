@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout | PINKY PAPER</title>
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+
+    <style>
+        .checkout-page {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .checkout-title {
+            text-align: center;
+            color: #c45d8b;
+            margin-bottom: 30px;
+        }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .checkout-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #f2dce7;
+            box-shadow: 0 5px 18px rgba(190,140,165,0.12);
+        }
+
+        .checkout-card h2 {
+            color: #c45d8b;
+            margin-bottom: 20px;
+        }
+
+        .checkout-form label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #76566a;
+            font-weight: bold;
+        }
+
+        .checkout-form input,
+        .checkout-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e8cbd8;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .checkout-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .payment-option {
+            background: #f0f7fc;
+            padding: 14px;
+            border-radius: 12px;
+            margin: 12px 0;
+            color: #527c9b;
+        }
+
+        .payment-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1dce6;
+            color: #76566a;
+        }
+
+        .checkout-total {
+            text-align: right;
+            font-size: 21px;
+            font-weight: bold;
+            color: #c45d8b;
+            margin-top: 20px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 25px;
+            background: #e9a9c5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .place-order-btn:hover {
+            background: #d989ae;
+        }
+
+        .payment-note {
+            font-size: 13px;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        @media(max-width: 750px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="/">PINKY PAPER ♡</a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'cart' %}">My Cart 🛒</a>
+        <a href="{% url 'dashboard' %}">My Account</a>
+    </nav>
+</header>
+
+<section class="checkout-page">
+
+    <h1 class="checkout-title">🎀 Checkout</h1>
+
+    <form method="POST" class="checkout-form">
+        {% csrf_token %}
+
+        <div class="checkout-layout">
+
+            <div class="checkout-card">
+                <h2>🚚 Delivery Details</h2>
+
+                <label>Full Name</label>
+                <input type="text" name="full_name"
+                       placeholder="Enter your full name" required>
+
+                <label>Phone Number</label>
+                <input type="tel" name="phone"
+                       placeholder="10-digit mobile number"
+                       pattern="[0-9]{10}" maxlength="10" required>
+
+                <label>Full Address</label>
+                <textarea name="address"
+                          placeholder="House name, street, city, district"
+                          required></textarea>
+
+                <label>Pincode</label>
+                <input type="text" name="pincode"
+                       placeholder="6-digit pincode"
+                       pattern="[0-9]{6}" maxlength="6" required>
+
+                <h2 style="margin-top:25px;">💳 Payment Method</h2>
+
+                <label class="payment-option">
+                    <input type="radio" name="payment_method"
+                           value="COD" required>
+                    Cash on Delivery (COD)
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio" name="payment_method"
+                           value="ONLINE" required>
+                    Online Payment
+                </label>
+
+                <p class="payment-note">
+                    Online payment gateway is not connected yet.
+                    Online orders will remain pending payment.
+                </p>
+            </div>
+
+            <div class="checkout-card">
+                <h2>🛍️ Your Order</h2>
+
+                {% for item in cart_items %}
+                    <div class="checkout-item">
+                        <span>
+                            {{ item.product.name }} × {{ item.quantity }}
+                        </span>
+                        <span>₹{{ item.subtotal }}</span>
+                    </div>
+                {% endfor %}
+
+                <div class="checkout-total">
+                    Total: ₹{{ total }}
+                </div>
+
+                <button type="submit" class="place-order-btn">
+                    Place My Order ♡
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</section>
+
+</body>
+</html>

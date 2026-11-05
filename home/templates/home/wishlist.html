@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wishlist | PINKY PAPER</title>
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+    <style>
+        .wishlist-page {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .wishlist-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .wishlist-heading h1 {
+            color: #c45d8b;
+            font-size: 32px;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 25px;
+        }
+
+        .wishlist-card {
+            background: #fff;
+            border: 1px solid #f5dce8;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(190, 140, 165, 0.12);
+            transition: 0.3s;
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .wishlist-image {
+            height: 170px;
+            background: #f0f7fc;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .wishlist-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+        .wishlist-image span {
+            font-size: 55px;
+        }
+
+        .wishlist-card h3 {
+            color: #76566a;
+            font-size: 17px;
+            margin: 10px 0;
+        }
+
+        .wishlist-price {
+            color: #c45d8b;
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .wishlist-remove {
+            background: #fde5ef;
+            color: #b94f7e;
+            border: 1px solid #f2bfd4;
+            padding: 9px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .wishlist-remove:hover {
+            background: #f7c9dc;
+        }
+
+        .wishlist-empty {
+            text-align: center;
+            background: #f0f7fc;
+            padding: 45px 20px;
+            border-radius: 20px;
+        }
+
+        .wishlist-empty a {
+            color: #c45d8b;
+        }
+
+        @media(max-width: 500px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .wishlist-card {
+                padding: 10px;
+            }
+
+            .wishlist-image {
+                height: 125px;
+            }
+        }
+        .wishlist-cart {
+    background: #dceefa;
+    color: #527c9b;
+    border: 1px solid #b9d8ed;
+    padding: 9px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.wishlist-cart:hover {
+    background: #c4e2f5;
+}
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="/">PINKY PAPER ♡</a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'dashboard' %}">My Account</a>
+        <a href="{% url 'cart' %}">My Cart 🛒</a>
+    </nav>
+</header>
+
+<section class="wishlist-page">
+
+    <div class="wishlist-heading">
+        <h1>💗 My Wishlist</h1>
+        <p>Your favourite stationery items ♡</p>
+    </div>
+
+    {% if wishlist_items %}
+        <div class="wishlist-grid">
+            {% for item in wishlist_items %}
+                <div class="wishlist-card">
+
+                    <div class="wishlist-image">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image }}"
+                                 alt="{{ item.product.name }}">
+                        {% else %}
+                            <span>🎀</span>
+                        {% endif %}
+                    </div>
+
+                    <h3>{{ item.product.name }}</h3>
+                    <p class="wishlist-price">₹{{ item.product.price }}</p>
+
+                    <form method="POST" action="{% url 'add_to_cart' item.product.id %}">
+    {% csrf_token %}
+    <button type="submit" class="wishlist-cart">
+        🛒 Add to Cart
+    </button>
+</form>
+
+                    <form method="POST"
+                          action="{% url 'remove_from_wishlist' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="wishlist-remove">
+                            Remove ♡
+                        </button>
+                    </form>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="wishlist-empty">
+            <h2>Your wishlist is empty! 🎀</h2>
+            <p>Find something cute for your collection.</p>
+            <a href="{% url 'home' %}">Explore Products ♡</a>
+        </div>
+    {% endif %}
+
+</section>
+
+</body>
+</html>

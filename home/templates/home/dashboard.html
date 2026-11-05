@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Account | PINKY PAPER</title>
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+</head>
+<body>
+
+<header>
+    <a class="logo" href="/">PINKY PAPER ♡</a>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'cart' %}">My Cart 🛒</a>
+        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="cart-btn">Logout</button>
+        </form>
+    </nav>
+</header>
+
+<section class="account-layout">
+
+    <aside class="account-sidebar">
+        <div class="profile-avatar">🎀</div>
+        <h2>{{ request.user.username }}</h2>
+        <p>Lovely Customer ♡</p>
+
+        <a class="active" href="{% url 'dashboard' %}">🏠 Dashboard</a>
+        <a href="#profile">👤 My Profile</a>
+        <a href="{% url 'order_history' %}">📦 My Orders</a>
+        <a href="{% url 'wishlist'%}">💗 My Wishlist</a>
+        <a href="{% url 'cart' %}">🛒 My Cart</a>
+    </aside>
+
+    <main class="account-main">
+
+        <div class="account-welcome">
+            <p>MY ACCOUNT ♡</p>
+            <h1>Welcome back, {{ request.user.username }}!</h1>
+            <p>Your little shopping world is waiting for you.</p>
+        </div>
+
+        <h2>Shopping Overview</h2>
+
+        <div class="account-stats">
+            <div class="stat-card">
+                <span>📦</span>
+                <h2>{{ order_count }}</h2>
+                <p>Total Orders</p>
+            </div>
+
+            <div class="stat-card">
+                <span>🛒</span>
+                <h2>{{ cart_count }}</h2>
+                <p>Cart Items</p>
+            </div>
+
+            <div class="stat-card">
+                <span>💗</span>
+                <h2>{{ wishlist_count }}</h2>
+                <p>Wishlist</p>
+            </div>
+        </div>
+
+        <div class="account-panel" id="profile">
+
+    <h2>👤 My Profile</h2>
+
+    <div class="profile-details">
+        <p>
+            <strong>Username:</strong>
+            {{ request.user.username }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ request.user.email|default:"Not added yet" }}
+        </p>
+
+        <p>
+            <strong>Member since:</strong>
+            {{ request.user.date_joined|date:"d M Y" }}
+        </p>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="cart-btn">
+            ✏️ Edit My Profile
+        </a>
+    </div>
+
+</div>
+
+        <div class="account-panel" id="orders">
+            <h2>📦 My Recent Orders</h2>
+            <a href="{% url 'order_history' %}">View All Orders →</a>
+            {% for order in recent_orders %}
+                <div class="order-row">
+                    <p>Order #{{ order.id }}</p>
+                    <p>₹{{ order.total_amount }}</p>
+                    <p>{{ order.created_at|date:"d M Y" }}</p>
+                    <p>
+    Status:
+    {% if order.is_completed %}
+        Completed
+    {% else %}
+        Processing
+    {% endif %}
+</p>
+                </div>
+            {% empty %}
+                <p>No orders yet. Start shopping! ♡</p>
+            {% endfor %}
+        </div>
+
+        <div class="account-panel" id="wishlist">
+            <h2>💗 My Wishlist</h2>
+            <p>Your favourite stationery items will appear here.</p>
+        </div>
+
+    </main>
+</section>
+
+<footer>
+    <h2>PINKY PAPER ♡</h2>
+    <p>Little things, big happiness!</p>
+</footer>
+
+</body>
+</html>

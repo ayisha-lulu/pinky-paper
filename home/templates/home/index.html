@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Django Website</title>
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="welcome-box">
+            <h1>Welcome to My Website!</h1>
+            <h2>Hello! I am learning Django.</h2>
+            <p>This is my first Django website.</p>
+        </div>
+
+        <div class="login-box">
+            <h2>Login</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <input type="text" name="username"
+                       placeholder="Username" required>
+
+                <input type="password" name="password"
+                       placeholder="Password" required>
+
+                <button type="submit">Login</button>
+            </form>
+
+            <p>Don't have an account?</p>
+
+            <a href="{% url 'register' %}">
+                Create New Account
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

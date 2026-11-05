@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | PINKY PAPER</title>
+
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+    
+    <style>
+        .detail-container {
+            max-width: 950px;
+            margin: 50px auto;
+            padding: 30px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            background: #fff8fc;
+            border-radius: 25px;
+        }
+
+        .detail-image {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+        }
+
+        .detail-image img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            object-fit: cover;
+        }
+
+        .detail-image .placeholder {
+            font-size: 120px;
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-info h1 {
+            color: #d66b9c;
+            font-size: 30px;
+        }
+
+        .detail-price {
+            color: #333;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .detail-description {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .detail-button {
+            display: inline-block;
+            padding: 13px 25px;
+            margin-top: 15px;
+            background: #a8d9f0;
+            color: #333;
+            text-decoration: none;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 20px;
+            color: #d66b9c;
+            text-decoration: none;
+        }
+
+        @media (max-width: 650px) {
+            .detail-container {
+                flex-direction: column;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="{% url 'home' %}" class="back-link">← Back to Shop</a>
+
+<div class="detail-container">
+
+    <div class="detail-image">
+        {% if product.image %}
+            <img src="{{ product.image }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="placeholder">🎀</div>
+        {% endif %}
+    </div>
+
+    <div class="detail-info">
+
+        <h1>{{ product.name }}</h1>
+
+        <p class="detail-price">₹{{ product.price }}</p>
+
+        <p class="detail-description">
+            {{ product.description }}
+        </p>
+
+        <p>Category: {{ product.category }}</p>
+
+        <p>Available Stock: {{ product.stock }}</p>
+
+        {% if product.stock > 0 %}
+            <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="detail-button">
+                    🛒 Add to Cart ♡
+                </button>
+            </form>
+        {% else %}
+            <p>Out of Stock ♡</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

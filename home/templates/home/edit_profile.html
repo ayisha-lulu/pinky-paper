@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | PINKY PAPER</title>
+
+    <link rel="stylesheet" href="{% static 'home/store.css' %}">
+
+    <style>
+        .profile-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 35px;
+            background: #fff8fc;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px #f4c5dc;
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            color: #d66b9c;
+        }
+
+        .profile-container label {
+            display: block;
+            margin-top: 18px;
+            color: #555;
+        }
+
+        .profile-container input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            margin-top: 7px;
+            border: 1px solid #f4c5dc;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .profile-container button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 25px;
+            background: #a8d9f0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #d66b9c;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="profile-container">
+
+    <h2>♡ Edit Your Profile ♡</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+<label>Username</label>
+<input type="text" name="username"
+       value="{{ request.user.username }}" required>
+        
+        <label>First Name</label>
+        <input type="text" name="first_name"
+               value="{{ request.user.first_name }}">
+
+        <label>Last Name</label>
+        <input type="text" name="last_name"
+               value="{{ request.user.last_name }}">
+
+        <label>Email Address</label>
+        <input type="email" name="email"
+               value="{{ request.user.email }}">
+
+        <button type="submit">Save Changes ♡</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
