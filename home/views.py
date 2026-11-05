@@ -79,7 +79,7 @@ def edit_profile(request):
 
     return render(request, 'home/edit_profile.html')
 
-
+@login_required
 def dashboard(request):
     cart = request.session.get('cart', {})
 
